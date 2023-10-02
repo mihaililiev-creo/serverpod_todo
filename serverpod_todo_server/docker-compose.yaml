@@ -4,17 +4,17 @@ services:
   postgres:
     image: postgres:14.1
     ports:
-      - '8090:5432'
+      - '8095:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: serverpod_todo
-      POSTGRES_PASSWORD: "lk25nrxw0XEUQyVaxaKP24SBSWHAYLn4"
+      POSTGRES_PASSWORD: 'lk25nrxw0XEUQyVaxaKP24SBSWHAYLn4'
     volumes:
       - serverpod_todo_data:/var/lib/postgresql/data
   redis:
     image: redis:6.2.6
     ports:
-      - '8091:6379'
+      - '8096:6379'
     command: redis-server --requirepass "LaTDr60YTHH4ZmEy7sMf7cD-uEbWh1O5"
     environment:
       - REDIS_REPLICATION_MODE=master
