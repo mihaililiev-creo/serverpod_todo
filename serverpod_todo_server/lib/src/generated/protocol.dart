@@ -11,7 +11,10 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'package:serverpod_auth_server/module.dart' as _i3;
 import 'example.dart' as _i4;
+import 'todo.dart' as _i5;
+import 'package:serverpod_todo_server/src/generated/todo.dart' as _i6;
 export 'example.dart';
+export 'todo.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -23,6 +26,54 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final targetDatabaseDefinition = _i2.DatabaseDefinition(tables: [
+    _i2.TableDefinition(
+      name: 'todos',
+      schema: 'public',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.integer,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'todos_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'user_id',
+          columnType: _i2.ColumnType.integer,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'title',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'completed',
+          columnType: _i2.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'todos_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     ..._i3.Protocol.targetDatabaseDefinition.tables,
     ..._i2.Protocol.targetDatabaseDefinition.tables,
   ]);
@@ -39,8 +90,18 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.Example) {
       return _i4.Example.fromJson(data, this) as T;
     }
+    if (t == _i5.Todo) {
+      return _i5.Todo.fromJson(data, this) as T;
+    }
     if (t == _i1.getType<_i4.Example?>()) {
       return (data != null ? _i4.Example.fromJson(data, this) : null) as T;
+    }
+    if (t == _i1.getType<_i5.Todo?>()) {
+      return (data != null ? _i5.Todo.fromJson(data, this) : null) as T;
+    }
+    if (t == List<_i6.Todo>) {
+      return (data as List).map((e) => deserialize<_i6.Todo>(e)).toList()
+          as dynamic;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -61,6 +122,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.Example) {
       return 'Example';
     }
+    if (data is _i5.Todo) {
+      return 'Todo';
+    }
     return super.getClassNameForObject(data);
   }
 
@@ -72,6 +136,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (data['className'] == 'Example') {
       return deserialize<_i4.Example>(data['data']);
+    }
+    if (data['className'] == 'Todo') {
+      return deserialize<_i5.Todo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
@@ -89,6 +156,10 @@ class Protocol extends _i1.SerializationManagerServer {
       if (table != null) {
         return table;
       }
+    }
+    switch (t) {
+      case _i5.Todo:
+        return _i5.Todo.t;
     }
     return null;
   }

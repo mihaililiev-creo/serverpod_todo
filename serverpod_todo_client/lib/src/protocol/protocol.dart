@@ -9,8 +9,11 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'example.dart' as _i2;
-import 'package:serverpod_auth_client/module.dart' as _i3;
+import 'todo.dart' as _i3;
+import 'package:serverpod_todo_client/src/protocol/todo.dart' as _i4;
+import 'package:serverpod_auth_client/module.dart' as _i5;
 export 'example.dart';
+export 'todo.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -34,11 +37,21 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i2.Example) {
       return _i2.Example.fromJson(data, this) as T;
     }
+    if (t == _i3.Todo) {
+      return _i3.Todo.fromJson(data, this) as T;
+    }
     if (t == _i1.getType<_i2.Example?>()) {
       return (data != null ? _i2.Example.fromJson(data, this) : null) as T;
     }
+    if (t == _i1.getType<_i3.Todo?>()) {
+      return (data != null ? _i3.Todo.fromJson(data, this) : null) as T;
+    }
+    if (t == List<_i4.Todo>) {
+      return (data as List).map((e) => deserialize<_i4.Todo>(e)).toList()
+          as dynamic;
+    }
     try {
-      return _i3.Protocol().deserialize<T>(data, t);
+      return _i5.Protocol().deserialize<T>(data, t);
     } catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -46,12 +59,15 @@ class Protocol extends _i1.SerializationManager {
   @override
   String? getClassNameForObject(Object data) {
     String? className;
-    className = _i3.Protocol().getClassNameForObject(data);
+    className = _i5.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth.$className';
     }
     if (data is _i2.Example) {
       return 'Example';
+    }
+    if (data is _i3.Todo) {
+      return 'Todo';
     }
     return super.getClassNameForObject(data);
   }
@@ -60,10 +76,13 @@ class Protocol extends _i1.SerializationManager {
   dynamic deserializeByClassName(Map<String, dynamic> data) {
     if (data['className'].startsWith('serverpod_auth.')) {
       data['className'] = data['className'].substring(15);
-      return _i3.Protocol().deserializeByClassName(data);
+      return _i5.Protocol().deserializeByClassName(data);
     }
     if (data['className'] == 'Example') {
       return deserialize<_i2.Example>(data['data']);
+    }
+    if (data['className'] == 'Todo') {
+      return deserialize<_i3.Todo>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

@@ -1,0 +1,6 @@
+class: Todo
+table: todos
+fields:
+  user_id: int
+  title: String
+  completed: bool
