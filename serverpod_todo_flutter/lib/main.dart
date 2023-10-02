@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 import 'package:serverpod_todo_client/serverpod_todo_client.dart';
+import 'package:serverpod_todo_flutter/login_page.dart';
 
 late Client client;
 late SessionManager sessionManager;
@@ -34,11 +35,17 @@ void main() async {
   );
   await sessionManager.initialize();
 
-  runApp(const MyApp());
+  final authenticated = sessionManager.isSignedIn;
+
+  runApp(MyApp(
+    authenticated: authenticated,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.authenticated}) : super(key: key);
+
+  final bool authenticated;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Serverpod Example'),
+      initialRoute: authenticated ? '/' : '/login',
+      routes: {
+        '/': (context) => const MyHomePage(title: 'Serverpod Example'),
+        '/login': (context) => const LoginPage()
+      },
     );
   }
 }
